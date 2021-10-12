@@ -2,7 +2,7 @@ import { BaseController } from './base-controller';
 import { Todo } from '@models';
 import { AppContext, Errors, ExtendedRequest, ValidationFailure } from '@typings';
 import { NextFunction, Router, Response } from 'express';
-import { createTodoValidator } from '@validators';
+import { createTodoValidator, deleteTodoValidator } from '@validators';
 import { Validation } from '@helpers';
 
 export class TodoController extends BaseController {
@@ -15,10 +15,14 @@ export class TodoController extends BaseController {
   }
 
   private initializeRoutes() {
-    this.router.post(
-      `${this.basePath}`,
-      createTodoValidator(this.appContext),
-      this.createTodo,
+    // Create a new todo item.
+    this.router.post(`${this.basePath}`, createTodoValidator(this.appContext), this.createTodo);
+
+    // Delete a todo item.
+    this.router.delete(
+      `${this.basePath}/:id`,
+      deleteTodoValidator(this.appContext),
+      this.deleteTodo,
     );
   }
 
@@ -38,5 +42,26 @@ export class TodoController extends BaseController {
     const todo = await this.appContext.todoRepository.save(new Todo({ title }));
 
     res.status(201).json(todo.serialize());
+  }
+
+  private deleteTodo = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
+
+    const failures: ValidationFailure[] = Validation.extractValidationErrors(req);
+
+    if (failures.length > 0) {
+      const valError = new Errors.ValidationError(
+        res.__('DEFAULT_ERRORS.VALIDATION_FAILED'),
+        failures,
+      );
+      return next(valError);
+    }
+
+    const { id } = req.params;
+
+    await this.appContext.todoRepository.deleteMany({
+      _id: this.appContext.todoRepository.toObjectId(id),
+    });
+
+    res.status(204).json();
   }
 }
