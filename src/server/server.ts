@@ -8,6 +8,9 @@ import { AppContext } from '@typings';
 logger.info('www - Initializing HTTP server...');
 logger.info('www - Initializing connection to Mongo Store...');
 
+// tslint:disable-next-line: no-var-requires
+const swaggerJsDoc = require('swagger-jsdoc'); const swaggerUI = require('swagger-ui-express');
+
 const mongoStore = new Mongoose.MongoStore();
 
 const respositoryContext = {
@@ -27,6 +30,20 @@ mongoStore
   .then(() => {
     logger.info('www - Connection to Mongo Store succeeded...');
     const app = new App(appContext);
+
+    const swaggerOptions = {
+      swaggerDefinition: {
+        info: {
+          title: 'TODO API',
+          version: '1.0.0',
+        },
+      },
+      apis: ['src/controllers/*.ts'],
+    };
+
+    const swaggerDocs = swaggerJsDoc(swaggerOptions);
+    app.expressApp.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
     const server = app.listen();
     appContext.logger.info('www - Server started...');
     process.on('SIGINT', () => {
