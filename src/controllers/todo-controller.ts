@@ -24,6 +24,12 @@ export class TodoController extends BaseController {
       deleteTodoValidator(this.appContext),
       this.deleteTodo,
     );
+
+    // Fetch all todos
+    this.router.get(
+      `${this.basePath}`,
+      this.fetchTodos,
+    );
   }
 
   private createTodo = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -63,5 +69,22 @@ export class TodoController extends BaseController {
     });
 
     res.status(204).json();
+  }
+
+  /**
+   * @openapi
+   * /todo:
+   *   get:
+   *     description: Welcome to swagger-jsdoc!
+   *     tags: [Books]
+   *     responses:
+   *       200:
+   *         description: Returns a mysterious string.
+   */
+  private fetchTodos = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
+
+    const todos = await this.appContext.todoRepository.getAll();
+
+    res.status(204).json(todos);
   }
 }

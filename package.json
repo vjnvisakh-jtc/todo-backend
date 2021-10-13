@@ -27,6 +27,8 @@
     "lodash": "^4.17.15",
     "module-alias": "^2.2.2",
     "mongoose": "5.8.11",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6",
     "typescript": "^3.7.5",
     "winston": "^3.2.1"
   },
