@@ -38,6 +38,12 @@ export class TodoController extends BaseController {
       deleteTodoValidator(this.appContext),
       this.fetchTodo,
     );
+
+    // Fetch all todos.
+    this.router.get(
+      `${this.basePath}/`,
+      this.fetchTodos,
+    );
   }
 
   private createTodo = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -141,5 +147,22 @@ export class TodoController extends BaseController {
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
+  }
+
+  private fetchTodos = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
+
+    const failures: ValidationFailure[] = Validation.extractValidationErrors(req);
+
+    if (failures.length > 0) {
+      const valError = new Errors.ValidationError(
+        res.__('DEFAULT_ERRORS.VALIDATION_FAILED'),
+        failures,
+      );
+      return next(valError);
+    }
+
+    const todos = await this.appContext.todoRepository.getAll();
+
+    res.status(200).send(todos);
   }
 }

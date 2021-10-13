@@ -95,3 +95,16 @@ describe('GET /todo/:id', () => {
 
   });
 });
+
+describe('GET /todo/', () => {
+
+  it('fetch all todo items', async () => {
+
+    const res = await chai  
+    .request(expressApp)
+    .get('/todo')
+
+    expect(res).to.have.status(200);
+
+  });
+});
