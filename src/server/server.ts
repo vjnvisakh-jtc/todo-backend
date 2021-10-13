@@ -1,5 +1,6 @@
 // tslint:disable-next-line: no-var-requires
-require('module-alias/register');
+require('module-alias/register'); const fs = require('fs');
+
 import i18n from 'i18n';
 import { App, logger } from '@server';
 import { Mongoose, Repositories } from '@storage';
@@ -42,6 +43,11 @@ mongoStore
     };
 
     const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+    fs.writeFile('./swagger.json', JSON.stringify(swaggerDocs),  (err: any) => {
+      console.log(err);
+    });
+
     app.expressApp.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
     const server = app.listen();

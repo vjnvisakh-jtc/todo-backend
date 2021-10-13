@@ -1,0 +1,1 @@
+{"info":{"title":"TODO API","version":"1.0.0"},"swagger":"2.0","paths":{"/todo":{"get":{"description":"Welcome to swagger-jsdoc!","tags":["Books"],"responses":{"200":{"description":"Returns a mysterious string."}}}}},"definitions":{},"responses":{},"parameters":{},"securityDefinitions":{},"tags":[]}
