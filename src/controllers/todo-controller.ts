@@ -31,6 +31,13 @@ export class TodoController extends BaseController {
       createTodoValidator(this.appContext),
       this.updateTodo,
     );
+
+    // Fetch a todo item.
+    this.router.get(
+      `${this.basePath}/:id`,
+      deleteTodoValidator(this.appContext),
+      this.fetchTodo,
+    );
   }
 
   private createTodo = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -99,6 +106,35 @@ export class TodoController extends BaseController {
         { _id: this.appContext.todoRepository.toObjectId(id) },
         { title },
       );
+
+      res.status(200).json(todo.serialize());
+
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+
+  private fetchTodo = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
+
+    const failures: ValidationFailure[] = Validation.extractValidationErrors(req);
+
+    if (failures.length > 0) {
+      const valError = new Errors.ValidationError(
+        res.__('DEFAULT_ERRORS.VALIDATION_FAILED'),
+        failures,
+      );
+      return next(valError);
+    }
+
+    const { id } = req.params;
+
+    try {
+
+      const todo = await this.appContext.todoRepository.findById(id);
+
+      if (todo._id === undefined) {
+        throw new Error('Id not found');
+      }
 
       res.status(200).json(todo.serialize());
 

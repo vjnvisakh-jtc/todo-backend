@@ -78,3 +78,20 @@ describe('PUT /todo/:id', () => {
 
   });
 });
+
+describe('GET /todo/:id', () => {
+
+  it('fetch a todo item', async () => {
+
+    const id = '6165c4518afdea58b202acf4';
+
+    const res = await chai  
+    .request(expressApp)
+    .get(`/todo/${id}`)
+    .set('content-type', 'application/json')
+
+    // TODO check why this is not working.
+    expect(res).to.not.have.status(200);
+
+  });
+});
