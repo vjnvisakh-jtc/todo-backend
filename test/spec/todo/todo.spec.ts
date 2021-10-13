@@ -6,7 +6,7 @@ import chai from 'chai';
 import spies from 'chai-spies';
 chai.use(spies);
 import chaiHttp from 'chai-http';
-import { Application } from 'express';
+import { application, Application } from 'express';
 import { respositoryContext, testAppContext } from '../../mocks/app-context';
 
 import { App } from '@server';
@@ -51,7 +51,7 @@ describe('POST /todo', () => {
 
 });
 
-describe('DELETE /todo', () => {
+describe('DELETE /todo/:id', () => {
 
   it('should remove the item specified in the id parameter', async () => {
 
