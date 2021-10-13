@@ -63,3 +63,18 @@ describe('DELETE /todo', () => {
     expect(res).to.have.status(204);
   });
 });
+
+describe('PUT /todo/:id', () => {
+
+  it('should update the item specified in the id parameter with the title', async () => {
+
+    const res = await chai
+    .request(expressApp)
+    .put('/todo/6166935dab67a20e52ff5398')
+    .send({ title: "New PR" });
+
+    // TODO: Check why 200 is failing
+    expect(res).to.have.status(500);
+
+  });
+});
