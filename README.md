@@ -16,7 +16,7 @@ We use [Gitflow](https://nvie.com/posts/a-successful-git-branching-model/) branc
 2. From the project root, initialize Hubflow: `git hf init`. Hit enter and let it use the default values.
 
 At this point, you are ready. For any new work/bug, we ensure that there is a corresponding JIRA ticket for it. Say, you are working on user story `Expose an API to let user register based on email`. It's corresponding ticket in JIRA is `MVP-1`. In this case, you will first create a feature branch as follows:
-
+ 
 ```
 git hf feature start MVP-1/account_creation_email
 ```
